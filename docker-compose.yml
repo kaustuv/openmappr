@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: npm start
+    depends_on:
+      - "athena"
+  athena:
+    build: ./athena
+    command: ./run_dev_mode.sh
+    depends_on:
+      - "beanstalk"
+  beanstalk:
+    image: schickling/beanstalkd
