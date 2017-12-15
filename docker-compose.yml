@@ -10,5 +10,8 @@ services:
     command: ./run_dev_mode.sh
     depends_on:
       - "beanstalk"
+      - "mongo"
   beanstalk:
     image: schickling/beanstalkd
+  mongo:
+    image: mongo:3.0-wheezy
