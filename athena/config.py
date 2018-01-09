@@ -18,4 +18,7 @@ class TestingConfig(Config):
     TESTING = True
     DATABASE = 'MAPPR_TEST'
 
+class DockerConfig(Config):
+    DATABASE_URI = 'mongodb://admin:admin123@mongo:27017/MAPPRDB'
+
 # create other configs here

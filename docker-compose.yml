@@ -7,11 +7,17 @@ services:
       - "athena"
   athena:
     build: ./athena
-    command: ./run_dev_mode.sh
+    command: ./run_docker_mode.sh
     depends_on:
       - "beanstalk"
       - "mongo"
   beanstalk:
     image: schickling/beanstalkd
   mongo:
-    image: mongo:3.0-wheezy
+    image: mongo:3.6.1-jessie
+    environment:
+      MONGO_INITDB_DATABASE: MAPPRDB
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - 27017:27017

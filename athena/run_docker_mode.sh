@@ -2,7 +2,7 @@
 
 NAME="athena"
 
-CONFIG="DevelopmentConfig"
+CONFIG="DockerConfig"
 export CONFIG
 
 USER=ubuntu
@@ -19,4 +19,4 @@ source venv/bin/activate
 # Start your unicorn
 # exec python athena_main.py
 # exec python athena_beanstalkd.py
-exec circusd athena_local.ini
+exec circusd athena_docker.ini

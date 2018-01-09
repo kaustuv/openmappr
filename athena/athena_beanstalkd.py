@@ -293,6 +293,8 @@ if configObjName == "ProductionConfig":
     conf = config.ProductionConfig
 elif configObjName == "TestingConfig":
     conf = config.TestingConfig
+elif configObjName == "DockerConfig":
+    conf = config.DockerConfig
 else:
     conf = config.DevelopmentConfig
 
