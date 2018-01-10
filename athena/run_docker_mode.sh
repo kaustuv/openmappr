@@ -18,5 +18,5 @@ source venv/bin/activate
 # cd ..
 # Start your unicorn
 # exec python athena_main.py
-# exec python athena_beanstalkd.py
-exec circusd athena_docker.ini
+exec python athena_beanstalkd.py
+# exec circusd athena_docker.ini

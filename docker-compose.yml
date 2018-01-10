@@ -1,10 +1,10 @@
 version: '3'
 services:
-  web:
-    build: .
-    command: npm start
-    depends_on:
-      - "athena"
+  # web:
+  #   build: .
+  #   command: npm start
+  #   depends_on:
+  #     - "athena"
   athena:
     build: ./athena
     command: ./run_docker_mode.sh
@@ -14,10 +14,10 @@ services:
   beanstalk:
     image: schickling/beanstalkd
   mongo:
-    image: mongo:3.6.1-jessie
+    image: mongo:3.2
     environment:
       MONGO_INITDB_DATABASE: MAPPRDB
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin123
     ports:
-      - 27017:27017
+      - "27017:27017"
