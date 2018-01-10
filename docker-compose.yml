@@ -13,11 +13,9 @@ services:
       - "mongo"
   beanstalk:
     image: schickling/beanstalkd
+    ports:
+      - "11300:11300"
   mongo:
-    image: mongo:3.2
-    environment:
-      MONGO_INITDB_DATABASE: MAPPRDB
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin123
+    build: ./mongo
     ports:
       - "27017:27017"

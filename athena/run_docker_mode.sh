@@ -18,5 +18,8 @@ source venv/bin/activate
 # cd ..
 # Start your unicorn
 # exec python athena_main.py
-exec python athena_beanstalkd.py
+
+# Hack to start athena after certain time to allow mongorestore to finish
+# TODO: control service startup order
+sleep 25 && exec python athena_beanstalkd.py
 # exec circusd athena_docker.ini

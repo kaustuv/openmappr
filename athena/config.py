@@ -19,6 +19,7 @@ class TestingConfig(Config):
     DATABASE = 'MAPPR_TEST'
 
 class DockerConfig(Config):
-    DATABASE_URI = 'mongodb://admin:admin123@mongo:27017/MAPPRDB'
+    DATABASE_URI = 'mongodb://mongo:27017/MAPPRDB'
+    BEANSTALK_HOST = "localhost"
 
 # create other configs here
