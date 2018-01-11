@@ -21,8 +21,8 @@ while [[ $? -ne 0 && $COUNTER -lt 60 ]] ; do
     grep -q 'waiting for connections on port' /var/log/mongodb.log
 done
 
-# Restore from dump
-mongorestore --db MAPPRDB /mongo/dump
+# Restore from dump created via: mongodump --db MAPPRDB --gzip --archive=mongolocal_MAPPRDB_base.gzip
+mongorestore --db MAPPRDB --gzip --noIndexRestore --archive=mongo/mongolocal_MAPPRDB_base.gzip
 # mongo MAPPRDB --eval "db.getSiblingDB('admin').shutdownServer()"
 
 # Keep container running

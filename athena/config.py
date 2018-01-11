@@ -20,6 +20,6 @@ class TestingConfig(Config):
 
 class DockerConfig(Config):
     DATABASE_URI = 'mongodb://mongo:27017/MAPPRDB'
-    BEANSTALK_HOST = "localhost"
+    BEANSTALK_HOST = "beanstalk"
 
 # create other configs here

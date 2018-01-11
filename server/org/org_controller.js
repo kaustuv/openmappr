@@ -88,36 +88,41 @@ module.exports = {
 
     // Admin only
     deleteOrg: function(req, res) {
-        console.log('[orgController.deleteOrg] delete');
+        var logPrefix = '[orgController.deleteOrg]';
         if (!req.org) {
             return res.status(500).send("Org not found");
         }
+        console.log(logPrefix, "Deleting org:", req.org._id, "named:", req.org.orgName);
+        console.log(logPrefix, "Number of projects:", req.org.projects.length);
         let dummyUser = {
             projects: []
         };
         // Remove org projects
         var projDelP = Promise.mapSeries(req.org.projects,
-            proj => projDeleter.delete(proj._id, dummyUser, req.org, false)
+            proj => {
+                console.log(logPrefix, "removing project:", proj.projName);
+                return projDeleter.delete(proj.ref, dummyUser, req.org, false);
+            }
         );
 
         //update org members
-        var membersDelP = Promise.all(_.map(req.org.users.members,
+        var membersDelP = projDelP.then(() => Promise.mapSeries(req.org.users.members,
             member => userModel.removeOrgFromUserAsync(member.email, req.org._id)
         ));
 
         //update org pending
-        var pendingDelP = Promise.all(_.map(req.org.users.pending,
+        var pendingDelP = projDelP.then(() => Promise.mapSeries(req.org.users.pending,
             pending => userModel.removeOrgFromUserAsync(pending.email, req.org._id)
         ));
-
+        // fail if the projects couldn't be deleted
         return Promise.join(membersDelP, pendingDelP, projDelP)
             .then(() => orgModel.removeByIdAsync(req.org._id))
             .then(function(response) {
-                console.log('[orgController.deleteOrg] org deleted successfully!');
+                console.log(logPrefix, 'org deleted successfully!');
                 return res.status(200).json(response);
             })
             .catch(function(err) {
-                console.warn("[orgController.deleteOrg] error in deleting org: ", err);
+                console.warn(logPrefix, "Error in deleting org:", err);
                 return res.status(500).send("Could not delete org");
             });
 

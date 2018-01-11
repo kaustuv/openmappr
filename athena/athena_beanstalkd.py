@@ -43,8 +43,10 @@ _BS_CLIENT = None
 
 def init(host, port, pipe):
     global _BS_CLIENT
+    print("Attempting to connect to beanstalk: %s:%s"%(host, port))
     _BS_CLIENT = beanstalkc.Connection(host, port)
     jobTracker.init(_BS_CLIENT)
+    print("Connected with beanstalk successfully!")
     _BS_CLIENT.watch(pipe)
 
 def run_server():
