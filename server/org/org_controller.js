@@ -6,6 +6,7 @@ var _ = require("lodash"),
 var orgModel = require("./org_model.js"),
     userModel = require("../user/user_model.js"),
     projModel = require("../project/proj_model.js"),
+    projDeleter = require("../project/proj_deleter.js"),
     playerModel = require("../player/player_model.js"),
     surveyTemplateModel = require("../survey/surveyTemplateModel.js"),
     emailService = require("../services/EmailService.js");
@@ -91,6 +92,13 @@ module.exports = {
         if (!req.org) {
             return res.status(500).send("Org not found");
         }
+        let dummyUser = {
+            projects: []
+        };
+        // Remove org projects
+        var projDelP = Promise.mapSeries(req.org.projects,
+            proj => projDeleter.delete(proj._id, dummyUser, req.org, false)
+        );
 
         //update org members
         var membersDelP = Promise.all(_.map(req.org.users.members,
@@ -102,12 +110,7 @@ module.exports = {
             pending => userModel.removeOrgFromUserAsync(pending.email, req.org._id)
         ));
 
-        // Remove org projects
-        var projDelP = Promise.all(_.map(req.org.projects,
-            proj => projModel.removeByIdAsync(proj)
-        ));
-
-        Promise.join(membersDelP, pendingDelP, projDelP)
+        return Promise.join(membersDelP, pendingDelP, projDelP)
             .then(() => orgModel.removeByIdAsync(req.org._id))
             .then(function(response) {
                 console.log('[orgController.deleteOrg] org deleted successfully!');
