@@ -7,6 +7,8 @@ WORKDIR /usr/src/mappr
 
 COPY package.json /usr/src/mappr/
 RUN npm install && npm install --only=dev && npm cache clean
+COPY bower.json /usr/src/mappr/
+RUN bower install
 
 COPY client /usr/src/mappr/client
 COPY etl-scripts /usr/src/mappr/etl-scripts

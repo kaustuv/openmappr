@@ -7,10 +7,11 @@ services:
   #     - "athena"
   athena:
     build: ./athena
-    command: ./run_docker_mode.sh
+    # command: ./run_docker_mode.sh
+    command: ["./wait-for-it.sh", "./run_docker_mode.sh"]
     depends_on:
-      - "beanstalk"
       - "mongo"
+      - "beanstalk"
   beanstalk:
     image: kusmierz/beanstalkd
     ports:
