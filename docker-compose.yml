@@ -12,7 +12,7 @@ services:
       - "beanstalk"
       - "mongo"
   beanstalk:
-    image: schickling/beanstalkd
+    image: kusmierz/beanstalkd
     ports:
       - "11300:11300"
   mongo:
