@@ -3,6 +3,8 @@
 
 set -e
 cmd="$1"
+
+# TODO:- Use a better logic to wait
 sleep 10
 
 >&2 echo "Mongo is up - executing command"

@@ -1,14 +1,17 @@
 version: '3'
 services:
-  # web:
-  #   build: .
-  #   command: npm start
-  #   depends_on:
-  #     - "athena"
+  web:
+    build: .
+    command: ./run_docker_mode.sh
+    depends_on:
+      - "athena"
+    ports:
+      - "8080:8080"
   athena:
     build: ./athena
-    # command: ./run_docker_mode.sh
     command: ["./wait-for-it.sh", "./run_docker_mode.sh"]
+    environment:
+      - PYTHONUNBUFFERED=1
     depends_on:
       - "mongo"
       - "beanstalk"

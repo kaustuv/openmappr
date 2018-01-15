@@ -21,5 +21,5 @@ echo "Starting my $NAME"
 
 # Hack to start athena after certain time to allow mongorestore to finish
 # TODO: control service startup order
-python athena_beanstalkd.py
+exec python athena_beanstalkd.py
 # exec circusd athena_docker.ini
