@@ -2,8 +2,12 @@ FROM node:5.12.0
 # replace this with your application's default port
 EXPOSE 8080
 
+RUN mkdir -p /usr/src/mappr
+WORKDIR /usr/src/mappr
 
-# Install Ruby(Copied from official ruby dockerfile)
+####################
+#### Install Ruby(Copied from official ruby dockerfile) ####
+####################
 ENV RUBY_MAJOR 2.4
 ENV RUBY_VERSION 2.4.3
 ENV RUBY_DOWNLOAD_SHA256 23677d40bf3b7621ba64593c978df40b1e026d8653c74a0599f0ead78ed92b51
@@ -57,8 +61,7 @@ RUN set -ex \
 	&& gem install bundler --version "$BUNDLER_VERSION" --force
 # Install Ruby end
 
-RUN mkdir -p /usr/src/mappr
-WORKDIR /usr/src/mappr
+RUN gem install sass && gem install compass
 
 COPY package.json /usr/src/mappr/
 RUN npm install && npm install --only=dev && npm cache clean
@@ -72,15 +75,16 @@ COPY client /usr/src/mappr/client
 COPY etl-scripts /usr/src/mappr/etl-scripts
 COPY server /usr/src/mappr/server
 COPY test /usr/src/mappr/test
-COPY *.js /usr/src/mappr/
 COPY mapping.json /usr/src/mappr/
+COPY *.js /usr/src/mappr/
 COPY *.sh /usr/src/mappr/
 
-RUN gem install sass && gem install compass
+
 RUN npm install -g grunt-cli
 RUN grunt
 
-RUN chmod +x ./run_docker_mode.sh
+RUN chmod +x ./run_docker_mode.sh && \
+	chmod +x ./wait-for-it.sh
 
 ENV NODE_ENV "docker"
 

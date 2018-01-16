@@ -5,11 +5,12 @@ services:
     command: ./run_docker_mode.sh
     depends_on:
       - "athena"
+      - "elasticsearch"
     ports:
       - "8080:8080"
   athena:
     build: ./athena
-    command: ["./wait-for-it.sh", "./run_docker_mode.sh"]
+    command: ./run_docker_mode.sh
     environment:
       - PYTHONUNBUFFERED=1
     depends_on:
@@ -23,3 +24,7 @@ services:
     build: ./mongo
     ports:
       - "27017:27017"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
+    ports:
+      - "9200:9200"

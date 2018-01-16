@@ -2,10 +2,10 @@
 
 module.exports = {
     'dbUrl': 'mongodb://mongo:27017/MAPPRDB',
-    'oldDbUrl': 'mongodb://localhost:27017/MPTEST',
+    'oldDbUrl': 'mongodb://mongo:27017/MPTEST',
     'sessiondbUrl': 'mongodb://mongo:27017/sessionDB',
     'elasticSearchConfig': {
-        host: 'localhost:9200',
+        host: 'elasticsearch:9200',
         log: 'error'
     },
     'athena' : {

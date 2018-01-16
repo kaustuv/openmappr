@@ -2,7 +2,7 @@
 
 # Ref: https://stackoverflow.com/questions/39282957/mongorestore-in-a-dockerfile
 
-# Initialize a mongo data folder and logfile
+# Initialize mongo logfile
 touch /var/log/mongodb.log
 chmod 777 /var/log/mongodb.log
 
@@ -21,8 +21,14 @@ while [[ $? -ne 0 && $COUNTER -lt 60 ]] ; do
     grep -q 'waiting for connections on port' /var/log/mongodb.log
 done
 
-# Restore from dump created via: mongodump --db MAPPRDB --gzip --archive=mongolocal_MAPPRDB_base.gzip
-mongorestore --db MAPPRDB --gzip --noIndexRestore --archive=mongo/mongolocal_MAPPRDB_base.gzip
+# Check if MAPPRDB exists
+if [[ $(mongo localhost:27017 --eval 'db.getMongo().getDBNames().indexOf("MAPPRDB")' --quiet) -lt 0 ]]; then
+    echo "MAPPRDB does not exist, restoring from DB dump"
+    # Restore from dump created via: mongodump --db MAPPRDB --gzip --archive=mongolocal_MAPPRDB_base.gzip
+    mongorestore --db MAPPRDB --gzip --noIndexRestore --archive=mongo/mongolocal_MAPPRDB_base.gzip
+else
+    echo "MAPPRDB exists."
+fi
 
 # Keep container running
 tail -f /dev/null
