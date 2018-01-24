@@ -6,7 +6,8 @@ module.exports = {
     'sessiondbUrl': 'mongodb://mongo:27017/sessionDB',
     'elasticSearchConfig': {
         host: 'elasticsearch:9200',
-        log: 'error'
+        log: 'error',
+        apiVersion: '2.4'
     },
     'athena' : {
         url : 'athena:5000'
