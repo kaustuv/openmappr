@@ -72,6 +72,73 @@ function _getSearchQuery(searchText, filterAttrIds) {
     return {queryObj, highlightObj};
 }
 
+function createIndex () {
+    // TODO: check if the index exists or not before creating it
+    let client = null;
+    return client.indices.exists(es_index)
+    .then(function(resp) {
+        // no idea what the resp is like
+        if(!resp) {
+            return client.indices.create({
+                index : es_index,
+                body : {
+                    "settings": {
+                        "index": {
+                            "analysis": {
+                                "filter": {
+                                    "my_en_stop": {
+                                        "type": "stop",
+                                        "stopwords": "_english_"
+                                    }
+                                },
+                                "analyzer": {
+                                    "custom_string_analyzer": {
+                                        "filter": [
+                                            "lowercase",
+                                            "my_en_stop",
+                                            "asciifolding",
+                                            "snowball"
+                                        ],
+                                        "char_filter": [
+                                            "html_strip",
+                                            "my_spl_char_mapping"
+                                        ],
+                                        "type": "custom",
+                                        "tokenizer": "whitespace"
+                                    }
+                                },
+                                "char_filter": {
+                                    "my_spl_char_mapping": {
+                                        "type": "mapping",
+                                        "mappings": [
+                                            "&=>\\u0020and\\u0020",
+                                            ":=>\\u0020",
+                                            "'=>\\u0020",
+                                            "?=>\\u0020",
+                                            "/=>"
+                                        ]
+                                    }
+                                }
+                            },
+                            // "number_of_shards": "1",
+                            // "number_of_replicas": "1"
+                        }
+                    }
+                }
+            })
+            .then(function(resp) {
+                console.log(logPrefix, resp);
+            })
+            .catch(function(err) {
+                console.error(err);
+                throw err;
+            });
+        } else {
+            console.log(logPrefix, "index already exists");
+        }
+    });
+}
+
 module.exports = {
     _getSearchQuery : _getSearchQuery,
     init: function(clientFactory) {
