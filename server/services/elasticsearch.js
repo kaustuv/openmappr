@@ -67,23 +67,21 @@ function _getSearchQuery(searchText, filterAttrIds) {
         }
     };
 
-    console.log(logPrefix + 'search query: ', JSON.stringify(queryObj));
-    console.log(logPrefix + 'highlight query: ', JSON.stringify(highlightObj));
+    // console.log(logPrefix + 'search query: ', JSON.stringify(queryObj));
+    // console.log(logPrefix + 'highlight query: ', JSON.stringify(highlightObj));
     return {queryObj, highlightObj};
 }
 
-function createIndex () {
-    // TODO: check if the index exists or not before creating it
-    let client = null;
-    return client.indices.exists(es_index)
+function createIndex (client) {
+    return client.indices.exists({
+        index: es_index
+    })
     .then(function(resp) {
-        // no idea what the resp is like
         if(!resp) {
             return client.indices.create({
-                index : es_index,
-                body : {
-                    "settings": {
-                        "index": {
+                    index : es_index,
+                    body : {
+                        "settings": {
                             "analysis": {
                                 "filter": {
                                     "my_en_stop": {
@@ -119,15 +117,15 @@ function createIndex () {
                                         ]
                                     }
                                 }
-                            },
+                            }
                             // "number_of_shards": "1",
                             // "number_of_replicas": "1"
                         }
-                    }
                 }
             })
             .then(function(resp) {
                 console.log(logPrefix, resp);
+                return true;
             })
             .catch(function(err) {
                 console.error(err);
@@ -135,6 +133,7 @@ function createIndex () {
             });
         } else {
             console.log(logPrefix, "index already exists");
+            return true;
         }
     });
 }
@@ -143,8 +142,8 @@ module.exports = {
     _getSearchQuery : _getSearchQuery,
     init: function(clientFactory) {
         elasticSearchClientFactory = clientFactory;
+        return createIndex(elasticSearchClientFactory());
     },
-
     sanitycheck: function(dataSetId, query, callback){
         var dsId = dataSetId.toString != null ? dataSetId.toString() : dataSetId;
         var queryObj = {"wildcard":{"_all":query+'*'}};
