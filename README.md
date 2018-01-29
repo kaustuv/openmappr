@@ -90,3 +90,20 @@ echo 5 > ~/.nvmrc
 ```
 npm install -g yo bower grunt-cli
 ```
+
+# Sass
+Sass and Compass need to be installed in order for sass to compile to css.
+
+* make sure ruby is installed first (by default on macs)
+
+* install sass
+```
+gem install sass
+```
+[Sass install](http://sass-lang.com/install)
+
+* install Compass
+```
+gem install compass
+```
+[Compass install](http://compass-style.org/install/)
