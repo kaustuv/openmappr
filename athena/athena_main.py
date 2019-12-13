@@ -1,7 +1,7 @@
 
 from flask import Flask, abort, make_response, request, jsonify
 import os
-import beanstalkc
+import greenstalk
 
 from athena.algoRunner import AlgoRunner
 from athena import mongoman
@@ -37,7 +37,7 @@ print 'Loaded config: %s' % configObjName
 mongoman.init(app.config['DATABASE_URI'], app.config['DATABASE'])
 
 #jobTracker.init(app.config['BEANSTALK_HOST'], app.config['BEANSTALK_PORT'])
-jobTracker.init(beanstalkc.Connection(app.config['BEANSTALK_HOST'], app.config['BEANSTALK_PORT']))
+jobTracker.init(greenstalk.Connection(app.config['BEANSTALK_HOST'], app.config['BEANSTALK_PORT']))
 
 @app.route('/')
 @app.route('/index')

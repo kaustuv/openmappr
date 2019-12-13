@@ -1,6 +1,6 @@
 # runs as a athena beanstalkD server
 import os
-import beanstalkc
+import greenstalk
 import json
 import sys
 # import logging
@@ -44,7 +44,7 @@ _BS_CLIENT = None
 def init(host, port, pipe):
     global _BS_CLIENT
     print("Attempting to connect to beanstalk: %s:%s"%(host, port))
-    _BS_CLIENT = beanstalkc.Connection(host, port)
+    _BS_CLIENT = greenstalk.Connection(host, port)
     jobTracker.init(_BS_CLIENT)
     print("Connected with beanstalk successfully!")
     _BS_CLIENT.watch(pipe)

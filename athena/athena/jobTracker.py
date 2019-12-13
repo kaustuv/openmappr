@@ -1,7 +1,7 @@
 ##
 # All mongo related handling here
 ##
-import beanstalkc
+import greenstalk
 import json
 from datetime import datetime
 
